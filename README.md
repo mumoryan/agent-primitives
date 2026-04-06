@@ -7,9 +7,13 @@ Shared across projects — Loci and future SaaS, enterprise, or embedded project
 
 ```
 agent-primitives/
+  schema/        Agent contract schema v2 — all agent definitions must conform
   base/          Layer 0+1 — identity + capability, model-agnostic, project-agnostic
   stacks/        Layer 2 — stack-specific context, reusable across projects
 ```
+
+All base agents in `base/` conform to the contract schema defined in
+`schema/agent-contract.md`. See `schema/README.md` for usage guidance.
 
 ## Usage
 

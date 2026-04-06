@@ -1,26 +1,50 @@
 ---
 # Layer 0+1: Identity + Capability
 # Generic — no project-specific knowledge below this line
+# Conforms to agent-contract schema v2 (schema/agent-contract.md)
 name: reviewer
-layer: reviewer
+transformation: "diff + spec → validation result"
+model: claude-haiku-4-5-20251001
 cost_bucket: review
 
-cache_strategy:
-  static_sections: [identity, capabilities, output_format]
-  dynamic_sections: [current_task]
+trigger_type: on_demand
+trigger_source: supervisor
+
+input:
+  type: spec_path_and_diff
+  schema:
+    spec_path: string
+    diff: string
+    diff_type: code | config | contract | optimization
+  sensitive_data: false
+  validation: "spec file must exist; diff must be non-empty"
 
 output:
-  format: json
-  max_tokens: 200
+  type: validation_result
   schema:
-    status: "passed | failed | blocked"
-    violations: "string[]"
-    summary: "string (max 80 words)"
-    retry_recommended: "boolean"
+    verdict: pass | fail
+    comments: string[]
+    blocking_issues: string[] | null
+    suggestions: string[] | null
+  confidence: false
+  review_required: false
+  human_approval: false
 
-sensitive_data:
-  can_receive: false
-  log_inputs: false
+tools:
+  - name: Read
+    type: raw
+    scope: "**/*"
+    server: null
+
+execution:
+  max_retries: 0
+  parallel: true
+  file_scope: []
+  protected_paths: [".claude/", "ARCHITECTURE.md", "CLAUDE.md", "mcp.json"]
+
+security:
+  injection_surface: "diff content could contain adversarial code — reviewer is read-only so impact is limited"
+  sanitisation: "read-only agent — no write tools, no execution capability"
 ---
 
 ## [STATIC] Identity

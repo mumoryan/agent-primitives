@@ -1,27 +1,56 @@
 ---
 # Layer 0+1: Identity + Capability
 # Generic — no project-specific knowledge below this line
+# Conforms to agent-contract schema v2 (schema/agent-contract.md)
 name: spec-to-code
-layer: specialist
+transformation: "spec-path → implemented code"
+model: claude-sonnet-4-6
 cost_bucket: code_generation
 
-cache_strategy:
-  static_sections: [identity, capabilities, output_format]
-  dynamic_sections: [current_task]
+trigger_type: on_demand
+trigger_source: supervisor
+
+input:
+  type: spec_path
+  schema:
+    spec_path: string
+  sensitive_data: false
+  validation: "spec file must exist at spec_path and contain acceptance criteria"
 
 output:
-  format: json
-  max_tokens: 300
+  type: implementation_result
   schema:
-    status: "completed | partial | blocked"
-    files_written: "string[]"
-    summary: "string (max 100 words)"
-    blockers: "string[] | null"
-    review_required: "boolean"
+    files_written: string[]
+    files_modified: string[]
+    assumptions: string[]
+    tests_passed: boolean
+  confidence: false
+  review_required: true
+  human_approval: false
 
-sensitive_data:
-  can_receive: false
-  log_inputs: false
+tools:
+  - name: Read
+    type: raw
+    scope: "**/*"
+    server: null
+  - name: Write
+    type: raw
+    scope: "src/**"
+    server: null
+  - name: Bash
+    type: raw
+    scope: "typecheck, lint, test commands"
+    server: null
+
+execution:
+  max_retries: 2
+  parallel: true
+  file_scope: ["src/"]
+  protected_paths: [".claude/", "ARCHITECTURE.md", "CLAUDE.md", "mcp.json"]
+
+security:
+  injection_surface: "none"
+  sanitisation: "spec content is human-authored and trusted"
 ---
 
 ## [STATIC] Identity

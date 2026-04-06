@@ -1,27 +1,53 @@
 ---
 # Layer 0+1: Identity + Capability
 # Generic — no project-specific knowledge below this line
-name: orchestrator
-layer: supervisor
+# Conforms to agent-contract schema v2 (schema/agent-contract.md)
+name: supervisor
+transformation: "task → routed agent call"
+model: claude-opus-4-6
 cost_bucket: orchestration
 
-cache_strategy:
-  static_sections: [identity, dispatch_rules, output_format]
-  dynamic_sections: [current_task]
+trigger_type: on_demand
+trigger_source: human
+
+input:
+  type: task_description
+  schema:
+    task: string
+    spec_path: string | null
+  sensitive_data: false
+  validation: "If task requires implementation, a spec file must exist or supervisor creates one first"
 
 output:
-  format: json
-  max_tokens: 500
+  type: dispatch_result
   schema:
-    action: "dispatch | write_spec | request_human_input | mark_complete"
-    agent: "string | null"
-    task: "object | null"
-    human_question: "string | null"
-    summary: "string (max 100 words)"
+    agents_dispatched: string[]
+    specs_referenced: string[]
+    status: complete | blocked | escalated
+    blockers: string[] | null
+  confidence: false
+  review_required: false
+  human_approval: false
 
-sensitive_data:
-  can_receive: false
-  log_inputs: true
+tools:
+  - name: Read
+    type: raw
+    scope: "**/*"
+    server: null
+  - name: Write
+    type: raw
+    scope: "specs/**"
+    server: null
+
+execution:
+  max_retries: 0
+  parallel: false
+  file_scope: ["specs/", "logs/progress.md"]
+  protected_paths: [".claude/", "ARCHITECTURE.md", "CLAUDE.md", "mcp.json"]
+
+security:
+  injection_surface: "task description from human — trusted"
+  sanitisation: "supervisor strips sensitive content before dispatching to non-sensitive agents"
 ---
 
 ## [STATIC] Identity
