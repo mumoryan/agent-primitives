@@ -22,6 +22,20 @@ in `<project>/.claude/agents/`. The `merge-agent.sh` script in each project
 concatenates base + stack + stub at session start, static sections first
 for prompt caching eligibility.
 
+## Observability
+
+Reusable observability tooling for agent-primitives projects.
+
+```
+observability/
+  schema.sql        SQLite schema for event storage and dashboard views
+  sync-events.sh    Syncs events.jsonl → observability.db (pass project dir as arg)
+  dashboard.ts      Local browser dashboard served by Bun (pass project dir as arg)
+```
+
+Each project creates thin wrapper scripts that call these with the correct
+project path. See any project's `scripts/` directory for examples.
+
 ## Layers
 
 | Layer | Location | Content | Changes when |
