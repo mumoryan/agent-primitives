@@ -35,6 +35,18 @@ tools:
     type: raw
     scope: "**/*"
     server: null
+  - name: github_review
+    type: mcp
+    scope: "read PRs, read diffs, read file contents, approve, request changes"
+    server: github-reviewer
+  - name: github_merge
+    type: mcp
+    scope: "merge PR via API if all criteria met — does not require Contents Write"
+    server: github-reviewer
+  - name: github_comment
+    type: mcp
+    scope: "comment on PRs with specific feedback when requesting changes or approving"
+    server: github-reviewer
 
 execution:
   max_retries: 0

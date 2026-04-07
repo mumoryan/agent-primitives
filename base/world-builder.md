@@ -28,6 +28,8 @@ output:
   review_required: true
   human_approval: true
 
+# No git access. World-builder outputs require human approval.
+# Changes are committed by the human after review.
 tools:
   - name: Read
     type: raw

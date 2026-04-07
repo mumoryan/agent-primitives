@@ -41,10 +41,23 @@ tools:
     type: raw
     scope: "typecheck, lint, test commands"
     server: null
+  - name: github_branch
+    type: mcp
+    scope: "create branch, commit, push"
+    server: github-implementer
+  - name: github_pr
+    type: mcp
+    scope: "create PR"
+    server: github-implementer
+  - name: github_comment
+    type: mcp
+    scope: "comment on own PRs — explain assumptions, flag decisions, respond to reviewer feedback"
+    server: github-implementer
 
 execution:
   max_retries: 2
   parallel: true
+  max_parallel_instances: 5
   file_scope: ["src/"]
   protected_paths: [".claude/", "ARCHITECTURE.md", "CLAUDE.md", "mcp.json"]
 

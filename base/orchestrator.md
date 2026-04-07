@@ -38,6 +38,10 @@ tools:
     type: raw
     scope: "specs/**"
     server: null
+  - name: github_read
+    type: mcp
+    scope: "read repos, read PRs, read issues"
+    server: github-supervisor
 
 execution:
   max_retries: 0

@@ -42,6 +42,7 @@ tools:                                # [required] explicit allowlist — least 
 execution:
   max_retries: integer                # [required] per spec, before escalation to supervisor/human
   parallel: boolean                   # [optional] can multiple instances run simultaneously? default: false
+  max_parallel_instances: integer | null  # [optional] max simultaneous instances. default: 5. Project stubs can override.
   file_scope: string[]                # [required] directories this agent may write to
   protected_paths: string[]           # [optional] explicit deny list — enforced by guard-core.sh
   isolation: string | null            # [optional] scheduling constraints e.g. "no parallel with feature work"
