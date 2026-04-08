@@ -99,4 +99,9 @@ echo ""
 cd "$PROJECT_DIR"
 LOG_FILE="$PROJECT_DIR/logs/session-${LOCI_SESSION_ID}.log"
 echo "Session trail: $LOG_FILE"
-script -q "$LOG_FILE" claude
+PROMPT="${2:-}"
+if [ -n "$PROMPT" ]; then
+  script -q "$LOG_FILE" claude "$PROMPT"
+else
+  script -q "$LOG_FILE" claude
+fi
