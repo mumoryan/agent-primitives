@@ -36,6 +36,34 @@ observability/
 Each project creates thin wrapper scripts that call these with the correct
 project path. See any project's `scripts/` directory for examples.
 
+## Infrastructure Scripts
+
+Deterministic session lifecycle scripts. AI handles judgment; scripts handle
+mechanics.
+
+```
+scripts/
+  start.sh       Session bootstrap, prereqs, ID generation, hook verification
+  dispatch.sh    Prepare worktree for agent instance
+  end.sh         Teardown, log sync, worktree cleanup, archiving
+```
+
+Each project creates thin wrappers that call these with the correct project
+path. See any project's `scripts/` directory for examples.
+
+### Usage
+
+```bash
+# Start session (replaces running `claude` directly)
+./scripts/loci-start.sh
+
+# Inside Claude — supervisor prepares worktrees before dispatch
+bash scripts/loci-dispatch.sh frontend-implementer 1 features entry-sequence
+
+# After Claude exits
+./scripts/loci-end.sh
+```
+
 ## Layers
 
 | Layer | Location | Content | Changes when |
