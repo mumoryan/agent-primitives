@@ -97,4 +97,6 @@ echo "Environment variables exported: LOCI_SESSION_ID, LOCI_TRACE_ID"
 echo ""
 
 cd "$PROJECT_DIR"
-exec claude
+LOG_FILE="$PROJECT_DIR/logs/session-${LOCI_SESSION_ID}.log"
+echo "Session trail: $LOG_FILE"
+script -q "$LOG_FILE" claude
