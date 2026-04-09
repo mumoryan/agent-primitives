@@ -1,7 +1,7 @@
 #!/bin/bash
-# guard-supervisor.sh — PreToolUse hook for supervisor agent only
+# guard-orchestrator.sh — PreToolUse hook for orchestrator agent only
 # Restricts Bash to approved infrastructure scripts and read-only commands.
-# Registered in the supervisor's agent stub, not globally.
+# Registered in the orchestrator's agent stub, not globally.
 
 INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // ""')
@@ -13,7 +13,7 @@ fi
 
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // ""')
 
-# Allowlist: infrastructure scripts the supervisor may invoke
+# Allowlist: infrastructure scripts the orchestrator may invoke
 ALLOWED_SCRIPTS="scripts/loci-dispatch\.sh|scripts/loci-start\.sh|scripts/loci-end\.sh|scripts/sync-events\.sh|scripts/dashboard\.sh"
 
 # Allowlist: read-only commands for inspecting state
@@ -29,7 +29,7 @@ elif echo "$COMMAND" | grep -qE "$ALLOWED_READONLY"; then
 elif echo "$COMMAND" | grep -qE "$ALLOWED_SOURCE"; then
   exit 0  # sourcing agent env
 else
-  echo "Blocked: supervisor bash restricted to approved scripts and read-only commands" >&2
+  echo "Blocked: orchestrator bash restricted to approved scripts and read-only commands" >&2
   echo "Attempted: $COMMAND" >&2
   exit 2  # hard block
 fi

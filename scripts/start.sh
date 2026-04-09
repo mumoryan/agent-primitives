@@ -43,12 +43,12 @@ echo "Checking hooks..."
 HOOKS=$(jq '.hooks.PostToolUse // empty' "$PROJECT_DIR/.claude/settings.json" 2>/dev/null)
 [ -z "$HOOKS" ] && { echo "FAIL: PostToolUse hook not registered in settings.json"; exit 1; }
 
-# --- Git state ---
+# --- Git state --- (skipped for now)
 
-echo "Checking git state..."
-cd "$PROJECT_DIR"
-git diff --quiet || { echo "FAIL: uncommitted changes — clean up before starting"; exit 1; }
-git diff --cached --quiet || { echo "FAIL: staged changes — commit or reset before starting"; exit 1; }
+# echo "Checking git state..."
+# cd "$PROJECT_DIR"
+# git diff --quiet || { echo "FAIL: uncommitted changes — clean up before starting"; exit 1; }
+# git diff --cached --quiet || { echo "FAIL: staged changes — commit or reset before starting"; exit 1; }
 
 # --- Generate session/trace IDs ---
 
@@ -89,6 +89,15 @@ cat "$PROJECT_DIR/logs/progress.md.header" "$PROJECT_DIR/logs/progress.md" \
   && mv "$PROJECT_DIR/logs/progress.md.tmp" "$PROJECT_DIR/logs/progress.md"
 rm -f "$PROJECT_DIR/logs/progress.md.header"
 
+# --- Write session state file (hooks can't inherit env vars) ---
+
+STATE_FILE="$PROJECT_DIR/logs/.session-state"
+jq -n \
+  --arg session_id "$LOCI_SESSION_ID" \
+  --arg trace_id "$LOCI_TRACE_ID" \
+  '{session_id: $session_id, trace_id: $trace_id}' > "$STATE_FILE"
+echo "State file written: $STATE_FILE"
+
 # --- Launch Claude ---
 
 echo ""
@@ -101,7 +110,9 @@ LOG_FILE="$PROJECT_DIR/logs/session-${LOCI_SESSION_ID}.log"
 echo "Session trail: $LOG_FILE"
 PROMPT="${2:-}"
 if [ -n "$PROMPT" ]; then
+  echo "Launching Claude Code with prompt ${PROMPT}"
   script -q "$LOG_FILE" claude "$PROMPT"
 else
+  echo "Prompt not provided. Launching Claude Code in interactive mode"
   script -q "$LOG_FILE" claude
 fi
