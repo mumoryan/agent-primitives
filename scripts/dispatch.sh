@@ -74,6 +74,12 @@ esac
 echo "Sparse checkout configured for $AGENT"
 echo "Excluded from worktree: scripts/, loci-docs/, worktrees/"
 
+# --- Derive GitHub repo context from git remote ---
+
+REMOTE_URL=$(git -C "$PROJECT_DIR" remote get-url origin 2>/dev/null || echo "")
+GITHUB_OWNER=$(echo "$REMOTE_URL" | sed 's|.*github\.com[:/]\([^/]*\)/.*|\1|')
+GITHUB_REPO=$(echo "$REMOTE_URL" | sed 's|.*github\.com[:/][^/]*/\([^.]*\).*|\1|')
+
 # --- Export env vars for the agent ---
 
 ENV_FILE="$WORKTREE_DIR/.agent-env"
@@ -85,6 +91,8 @@ export LOCI_SPEC_CATEGORY="$CATEGORY"
 export LOCI_SPEC_NAME="$SPEC"
 export LOCI_SESSION_ID="${LOCI_SESSION_ID:-ses_$(date +%s)}"
 export LOCI_TRACE_ID="${LOCI_TRACE_ID:-trc_unknown}"
+export GITHUB_OWNER="$GITHUB_OWNER"
+export GITHUB_REPO="$GITHUB_REPO"
 EOF
 
 echo ""
