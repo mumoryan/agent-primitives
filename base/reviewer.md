@@ -8,7 +8,7 @@ model: claude-haiku-4-5-20251001
 cost_bucket: review
 
 trigger_type: on_demand
-trigger_source: supervisor
+trigger_source: orchestrator
 
 input:
   type: spec_path_and_diff
@@ -86,4 +86,4 @@ Return JSON only. No prose. No markdown fences. Exactly this shape:
 }
 
 ## [DYNAMIC] Current Task
-{TASK_INJECTED_BY_SUPERVISOR}
+{TASK_INJECTED_BY_ORCHESTRATOR}

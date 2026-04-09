@@ -5,22 +5,22 @@
 
 # === IDENTITY ===
 name: string                          # [required] unique agent identifier
-transformation: string                # [required] "input → output" — supervisor routing signal
+transformation: string                # [required] "input → output" — orchestrator routing signal
 model: string                         # [required] model identifier
 cost_bucket: enum                     # [required] orchestration | code_generation | world_building | review
 
 # === TRIGGER ===
 trigger_type: on_demand | periodic    # [required] default: on_demand
 periodic_cadence: string | null       # [optional] e.g. "weekly" — only if trigger_type is periodic
-trigger_source: supervisor | human | schedule  # [optional] who/what initiates — default: supervisor
+trigger_source: orchestrator | human | schedule  # [optional] who/what initiates — default: orchestrator
 
 # === INPUT CONTRACT ===
 input:
-  type: string                        # [required] semantic label for what supervisor passes
-  schema:                             # [required] typed fields — supervisor validates before dispatch
+  type: string                        # [required] semantic label for what orchestrator passes
+  schema:                             # [required] typed fields — orchestrator validates before dispatch
     field_name: type                  #   at minimum one field
   sensitive_data: boolean             # [required] can this agent receive sensitive content (e.g. note text)?
-  validation: string                  # [required] human-readable rule supervisor checks before dispatch
+  validation: string                  # [required] human-readable rule orchestrator checks before dispatch
 
 # === OUTPUT CONTRACT ===
 output:
@@ -40,7 +40,7 @@ tools:                                # [required] explicit allowlist — least 
 
 # === EXECUTION ===
 execution:
-  max_retries: integer                # [required] per spec, before escalation to supervisor/human
+  max_retries: integer                # [required] per spec, before escalation to orchestrator/human
   parallel: boolean                   # [optional] can multiple instances run simultaneously? default: false
   max_parallel_instances: integer | null  # [optional] max simultaneous instances. default: 5. Project stubs can override.
   file_scope: string[]                # [required] directories this agent may write to

@@ -8,7 +8,7 @@ model: claude-sonnet-4-6
 cost_bucket: world_building
 
 trigger_type: on_demand
-trigger_source: supervisor
+trigger_source: orchestrator
 
 input:
   type: mood_or_theme
@@ -48,7 +48,7 @@ execution:
 
 security:
   injection_surface: "note_context — contains user-authored personal content"
-  sanitisation: "note content validated at MCP layer post-PoC; PoC phase: supervisor strips injection patterns before dispatch"
+  sanitisation: "note content validated at MCP layer post-PoC; PoC phase: orchestrator strips injection patterns before dispatch"
 ---
 
 ## [STATIC] Identity
@@ -83,4 +83,4 @@ Return JSON only. No prose. No markdown fences. Exactly this shape:
 }
 
 ## [DYNAMIC] Current Task
-{TASK_INJECTED_BY_SUPERVISOR}
+{TASK_INJECTED_BY_ORCHESTRATOR}

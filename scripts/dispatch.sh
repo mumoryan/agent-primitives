@@ -4,7 +4,7 @@
 # Example: dispatch.sh ~/Dev/loci frontend-implementer 1 features entry-sequence
 #
 # Creates: <project-dir>/worktrees/<agent-name>-<instance>/
-# The supervisor calls this before dispatching a subagent.
+# The orchestrator calls this before dispatching a subagent.
 
 set -e
 
@@ -50,7 +50,7 @@ git worktree add "$WORKTREE_DIR" -b "$BRANCH" main
 
 # --- Set up sparse checkout per agent type ---
 # Each agent only sees the directories it needs.
-# scripts/ is excluded from all agents — only supervisor (main checkout) can see them.
+# scripts/ is excluded from all agents — only orchestrator (main checkout) can see them.
 
 cd "$WORKTREE_DIR"
 git sparse-checkout init --cone 2>/dev/null || true
@@ -98,6 +98,6 @@ EOF
 echo ""
 echo "=== Worktree ready ==="
 echo "Agent env written to: $ENV_FILE"
-echo "Supervisor: dispatch subagent to work in $WORKTREE_DIR"
+echo "Orchestrator: dispatch subagent to work in $WORKTREE_DIR"
 echo "Agent should: source .agent-env, then implement spec"
 echo ""
