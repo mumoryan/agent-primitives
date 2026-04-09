@@ -57,7 +57,7 @@ path. See any project's `scripts/` directory for examples.
 # Start session (replaces running `claude` directly)
 ./scripts/loci-start.sh
 
-# Inside Claude — supervisor prepares worktrees before dispatch
+# Inside Claude — orchestrator prepares worktrees before dispatch
 bash scripts/loci-dispatch.sh frontend-implementer 1 features entry-sequence
 
 # After Claude exits

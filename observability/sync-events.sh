@@ -1,7 +1,7 @@
 #!/bin/bash
 # Syncs logs/events.jsonl into logs/observability.db (SQLite)
 # Reusable across projects — pass project root as argument.
-# Run: at end of each supervisor session + on demand by human
+# Run: at end of each orchestrator session + on demand by human
 # Usage: ./sync-events.sh <project-dir>
 
 set -euo pipefail

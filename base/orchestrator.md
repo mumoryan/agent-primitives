@@ -2,7 +2,7 @@
 # Layer 0+1: Identity + Capability
 # Generic — no project-specific knowledge below this line
 # Conforms to agent-contract schema v2 (schema/agent-contract.md)
-name: supervisor
+name: orchestrator
 transformation: "task → routed agent call"
 model: claude-opus-4-6
 cost_bucket: orchestration
@@ -16,7 +16,7 @@ input:
     task: string
     spec_path: string | null
   sensitive_data: false
-  validation: "If task requires implementation, a spec file must exist or supervisor creates one first"
+  validation: "If task requires implementation, a spec file must exist or orchestrator creates one first"
 
 output:
   type: dispatch_result
@@ -41,7 +41,7 @@ tools:
   - name: github_read
     type: mcp
     scope: "read repos, read PRs, read issues"
-    server: github-supervisor
+    server: github-orchestrator
 
 execution:
   max_retries: 0
@@ -51,7 +51,7 @@ execution:
 
 security:
   injection_surface: "task description from human — trusted"
-  sanitisation: "supervisor strips sensitive content before dispatching to non-sensitive agents"
+  sanitisation: "orchestrator strips sensitive content before dispatching to non-sensitive agents"
 ---
 
 ## [STATIC] Identity

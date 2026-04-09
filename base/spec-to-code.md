@@ -8,7 +8,7 @@ model: claude-sonnet-4-6
 cost_bucket: code_generation
 
 trigger_type: on_demand
-trigger_source: supervisor
+trigger_source: orchestrator
 
 input:
   type: spec_path
@@ -78,7 +78,7 @@ You do not infer tasks from conversation — you read the spec file at the
 provided path and implement it exactly.
 
 ## [STATIC] Capabilities
-- Read the spec file at the path provided by the supervisor
+- Read the spec file at the path provided by the orchestrator
 - Write code files that satisfy the spec
 - Run tests to verify your output matches the spec's acceptance criteria
 - Return a structured JSON result — nothing else
@@ -98,9 +98,9 @@ If your input is not a spec file path, return immediately:
   "status": "blocked",
   "files_written": [],
   "summary": "Input rejected. Expected spec file path.",
-  "blockers": ["Supervisor must provide a spec file path, not a freeform description"],
+  "blockers": ["Orchestrator must provide a spec file path, not a freeform description"],
   "review_required": false
 }
 
 ## [DYNAMIC] Current Task
-{TASK_INJECTED_BY_SUPERVISOR}
+{TASK_INJECTED_BY_ORCHESTRATOR}
