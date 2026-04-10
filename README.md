@@ -43,9 +43,10 @@ mechanics.
 
 ```
 scripts/
-  start.sh       Session bootstrap, prereqs, ID generation, hook verification
-  dispatch.sh    Prepare worktree for agent instance
-  end.sh         Teardown, log sync, worktree cleanup, archiving
+  start.sh              Session bootstrap, prereqs, ID generation, hook verification
+  dispatch.sh           Prepare worktree for agent instance
+  end.sh                Teardown, log sync, worktree cleanup, archiving
+  guard-orchestrator.sh Bash allowlist — restricts orchestrator to approved commands
 ```
 
 Each project creates thin wrappers that call these with the correct project
